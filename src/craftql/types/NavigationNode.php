@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\appmodule\integrations\CraftQL\Types;
+namespace verbb\navigation\craftql\types;
 
 use markhuot\CraftQL\Builders\Schema;
 
