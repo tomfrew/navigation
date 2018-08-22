@@ -5,6 +5,8 @@ use verbb\navigation\base\PluginTrait;
 use verbb\navigation\models\Settings;
 use verbb\navigation\variables\NavigationVariable;
 
+use \markhuot\CraftQL;
+
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterUrlRulesEvent;
@@ -46,6 +48,16 @@ class Navigation extends Plugin
         // Allow elements to update our nodes
         Event::on(Elements::class, Elements::EVENT_BEFORE_SAVE_ELEMENT, [ $this->nodes, 'onSaveElement' ]);
         Event::on(Elements::class, Elements::EVENT_AFTER_DELETE_ELEMENT, [ $this->nodes, 'onDeleteElement' ]);
+
+        // CraftQL integration
+        if (class_exists(CraftQL::class)) {
+            Event::on(
+                CraftQL\Types\Query::class,
+                CraftQL\Events\AlterQuerySchema::EVENT,
+                [new craftql\listeners\AlterQuerySchema, 'handle']
+            );
+        }
+
     }
 
     public function getPluginName()
