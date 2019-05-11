@@ -123,6 +123,15 @@ class Navigation extends Plugin
 
         // When a site is updated, propagate nodes
         Event::on(Sites::class, Sites::EVENT_AFTER_SAVE_SITE, [$this->getNodes(), 'afterSaveSiteHandler']);
+
+        // CraftQL integration
+        if (class_exists(\markhuot\CraftQL\CraftQL::class)) {
+            Event::on(
+                \markhuot\CraftQL\Types\Query::class,
+                \markhuot\CraftQL\Events\AlterQuerySchema::EVENT,
+                [new craftql\listeners\AlterQuerySchema, 'handle']
+            );
+        }
     }
 
     private function _registerProjectConfigEventListeners()
